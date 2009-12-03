@@ -3,7 +3,7 @@
 Plugin Name: Image Feed Widget
 Plugin URI: http://yorik.uncreated.net
 Description: A widget to display imges from RSS feeds such as twitter, flickr or youtube
-Version: 0.1
+Version: 0.2
 Author: Yorik van Havre
 Author URI: http://yorik.uncreated.net
 */
@@ -25,7 +25,7 @@ Author URI: http://yorik.uncreated.net
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-function get_image_feed_list($feedslist, $maxfeeds=90, $divname='standard', $printtext=NULL) {
+function get_image_feed_list($feedslist, $maxfeeds=90, $divname='standard', $printtext=NULL, $target='samewindow') {
 
                 // This is the main function of the plugin. It is used by the widget and can also be called from anywhere in your theme. See the readme file for example.
 
@@ -51,7 +51,8 @@ function get_image_feed_list($feedslist, $maxfeeds=90, $divname='standard', $pri
 		  foreach ( $rss_items as $item ) : ?>
 		    <li>
                       <div class="<?php echo $divname; ?>">
-                          <a href='<?php echo $item->get_permalink(); ?>'
+                          <a href="<?php echo $item->get_permalink(); ?>"
+		            <?php if ($target == 'newwindow') { echo 'target="_BLANK" '; }; ?>
 		            title="<?php echo $item->get_title().' - Postada em '.$item->get_date('d M Y, H:i'); ?>">
                             <?php if ($thumb = $item->get_item_tags(SIMPLEPIE_NAMESPACE_MEDIARSS, 'thumbnail') ) {
                                 $thumb = $thumb[0]['attribs']['']['url'];
@@ -97,12 +98,15 @@ class Image_Feed_Widget extends WP_Widget {
     $title = empty($instance['title']) ? '&nbsp;' : apply_filters('widget_title', $instance['title']);
     $feeds_list = empty($instance['feeds_list']) ? '&nbsp;' : $instance['feeds_list'];
     $maxnumber = empty($instance['maxnumber']) ? '&nbsp;' : $instance['maxnumber'];
+    $target = empty($instance['target']) ? '&nbsp;' : $instance['target'];
  
     if ( !empty( $title ) ) { echo $before_title . $title . $after_title; };
 
+    if ( empty( $target ) ) { $target = 'samewindow'; };
+
     if ( !empty( $feeds_list ) ) {
 
-                get_image_feed_list($feeds_list, $maxnumber, 'small'); ?>
+      get_image_feed_list($feeds_list, $maxnumber, 'small', NULL, $target); ?>
 
                 <div style="clear:both;"></div>
 
@@ -116,21 +120,36 @@ class Image_Feed_Widget extends WP_Widget {
     $instance['title'] = strip_tags($new_instance['title']);
     $instance['feeds_list'] = strip_tags($new_instance['feeds_list']);
     $instance['maxnumber'] = strip_tags($new_instance['maxnumber']);
+    $instance['target'] = strip_tags($new_instance['target']);
  
     return $instance;
   }
  
   function form($instance) {
-    $instance = wp_parse_args( (array) $instance, array( 'title' => '', 'feeds_list' => '', 'maxnumber' => '' ) );
+    $instance = wp_parse_args( (array) $instance, array( 'title' => '', 'feeds_list' => '', 'maxnumber' => '', 'target' => '' ) );
     $title = strip_tags($instance['title']);
     $feeds_list = strip_tags($instance['feeds_list']);
     $maxnumber = strip_tags($instance['maxnumber']);
+    $target = strip_tags($instance['target']);
 ?>
       <p><label for="<?php echo $this->get_field_id('title'); ?>">Title: <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo attribute_escape($title); ?>" /></label></p>
 								    
       <p><label for="<?php echo $this->get_field_id('feeds_list__title'); ?>">RSS feeds (comma-separated): <input class="widefat" id="<?php echo $this->get_field_id('feeds_list'); ?>" name="<?php echo $this->get_field_name('feeds_list'); ?>" type="text" value="<?php echo attribute_escape($feeds_list); ?>" /></label></p>
-														     
+		     
       <p><label for="<?php echo $this->get_field_id('maxnumber'); ?>">Max number of images to display: <input class="widefat" id="<?php echo $this->get_field_id('maxnumber'); ?>" name="<?php echo $this->get_field_name('maxnumber'); ?>" type="text" value="<?php echo attribute_escape($maxnumber); ?>" /></label></p>
+
+      <p><label for="<?php echo $this->get_field_id('target'); ?>">Where to open the links: <select id="<?php echo $this->get_field_id('target'); ?>" name="<?php echo $this->get_field_name('target'); ?>"
+        <?php 
+  	  echo '<option ';
+          if ( $instance['target'] == 'samewindow' ) { echo 'selected '; }
+          echo 'value="samewindow">';
+	  echo 'Same Window</option>';
+  	  echo '<option ';
+          if ( $instance['target'] == 'newwindow' ) { echo 'selected '; }
+          echo 'value="newwindow">';
+	  echo 'New Window</option>'; ?>
+      </select></label></p>
+
 <?php
 																			}
 }

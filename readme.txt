@@ -70,3 +70,6 @@ See the plugin in action on http://www.oteatromagico.mus.br/wordpress
 
 = 0.1 =
 * First version
+
+= 0.2 =
+* Added a selection box to choose between opening links in the same window or in a new window
