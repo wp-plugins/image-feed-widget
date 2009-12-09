@@ -50,13 +50,14 @@ you must of course specify a width that allows more than one image to fit in you
 
 Anywhere in your theme templates, you can display a list of images coming from rss feeds. Just place the following code where you want the images to appear:
 
-`<?php get_image_feed_list($feedslist, $maxfeeds, $divname, $printtext); ?>`
+`<?php get_image_feed_list($feedslist, $maxfeeds, $divname, $printtext, $target); ?>`
 
 Where:
 * $feedlist is a comma-separated list of rss feed urls (mandatory)
 * $maxfeeds is the maximum number of images to display (optional, default = 90)
 * $divname is a name suffix for the list class. "myList" will become "image-feed-myList" (optional)
-* $printtext must be 1 if you want the image title to be printed below the image
+* $printtext must be 1 if you want the image title to be printed below the image (optional)
+* $target is "samewindow" or "newwindow", depending on where you want links to open (optional, default = samewindow)
 
 Example:
 
