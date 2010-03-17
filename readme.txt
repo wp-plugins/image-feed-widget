@@ -3,7 +3,7 @@ Contributors: yorik
 Donate link: None! Keep your money for important things!
 Tags: rss, feed, image, widget
 Requires at least: 2.8.4
-Tested up to: 2.8.5
+Tested up to: 2.9.2
 Stable tag: trunk
 
 A widget to display imges from RSS feeds such as twitter, flickr or youtube
@@ -50,7 +50,7 @@ you must of course specify a width that allows more than one image to fit in you
 
 Anywhere in your theme templates, you can display a list of images coming from rss feeds. Just place the following code where you want the images to appear:
 
-`<?php get_image_feed_list($feedslist, $maxfeeds, $divname, $printtext, $target); ?>`
+`<?php get_image_feed_list($feedslist, $maxfeeds, $divname, $printtext, $target, $useenclosures); ?>`
 
 Where:
 * $feedlist is a comma-separated list of rss feed urls (mandatory)
@@ -58,6 +58,7 @@ Where:
 * $divname is a name suffix for the list class. "myList" will become "image-feed-myList" (optional)
 * $printtext must be 1 if you want the image title to be printed below the image (optional)
 * $target is "samewindow" or "newwindow", depending on where you want links to open (optional, default = samewindow)
+* $useenclosures is "yes" or "no" (optional, default = yes). Use this if you don't want to use the <enclosure> tag in the feed and force the script to find an image link in the feed item description. Some feeds like flickr use an original-size image in enclosure and a thumbnail-size image in the description, don't ask me why...
 
 Example:
 
@@ -74,3 +75,6 @@ See the plugin in action on http://www.oteatromagico.mus.br/wordpress
 
 = 0.2 =
 * Added a selection box to choose between opening links in the same window or in a new window
+
+= 0.3 =
+* Added an option to disable the use of enclosure tags

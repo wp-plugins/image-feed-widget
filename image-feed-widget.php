@@ -3,7 +3,7 @@
 Plugin Name: Image Feed Widget
 Plugin URI: http://yorik.uncreated.net
 Description: A widget to display imges from RSS feeds such as twitter, flickr or youtube
-Version: 0.2
+Version: 0.3
 Author: Yorik van Havre
 Author URI: http://yorik.uncreated.net
 */
@@ -25,7 +25,7 @@ Author URI: http://yorik.uncreated.net
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-function get_image_feed_list($feedslist, $maxfeeds=90, $divname='standard', $printtext=NULL, $target='samewindow') {
+function get_image_feed_list($feedslist, $maxfeeds=90, $divname='standard', $printtext=NULL, $target='samewindow', $useenclosures='yes') {
 
                 // This is the main function of the plugin. It is used by the widget and can also be called from anywhere in your theme. See the readme file for example.
 
@@ -58,7 +58,7 @@ function get_image_feed_list($feedslist, $maxfeeds=90, $divname='standard', $pri
                                 $thumb = $thumb[0]['attribs']['']['url'];
 	                        echo '<img src="'.$thumb.'"'; 
                                 echo ' alt="'.$item->get_title().'"/>';
-                             } else if ($enclosure = $item->get_enclosure() ) {
+                             } else if ( $useenclosures == 'yes' && $enclosure = $item->get_enclosure() ) {
                                 $enclosure = $item->get_enclosures();
 	                        echo '<img src="'.$enclosure[0]->get_link().'"'; 
                                 echo ' alt="'.$item->get_title().'"/>';
@@ -99,14 +99,17 @@ class Image_Feed_Widget extends WP_Widget {
     $feeds_list = empty($instance['feeds_list']) ? '&nbsp;' : $instance['feeds_list'];
     $maxnumber = empty($instance['maxnumber']) ? '&nbsp;' : $instance['maxnumber'];
     $target = empty($instance['target']) ? '&nbsp;' : $instance['target'];
+    $useenclosures = empty($instance['useenclosures']) ? '&nbsp;' : $instance['useenclosures'];
  
     if ( !empty( $title ) ) { echo $before_title . $title . $after_title; };
 
     if ( empty( $target ) ) { $target = 'samewindow'; };
 
+    if ( empty( $useenclosures ) ) { $useenclosures = 'yes'; };
+
     if ( !empty( $feeds_list ) ) {
 
-      get_image_feed_list($feeds_list, $maxnumber, 'small', NULL, $target); ?>
+      get_image_feed_list($feeds_list, $maxnumber, 'small', NULL, $target, $useenclosures); ?>
 
                 <div style="clear:both;"></div>
 
@@ -121,16 +124,18 @@ class Image_Feed_Widget extends WP_Widget {
     $instance['feeds_list'] = strip_tags($new_instance['feeds_list']);
     $instance['maxnumber'] = strip_tags($new_instance['maxnumber']);
     $instance['target'] = strip_tags($new_instance['target']);
+    $instance['useenclosures'] = strip_tags($new_instance['useenclosures']);
  
     return $instance;
   }
  
   function form($instance) {
-    $instance = wp_parse_args( (array) $instance, array( 'title' => '', 'feeds_list' => '', 'maxnumber' => '', 'target' => '' ) );
+    $instance = wp_parse_args( (array) $instance, array( 'title' => '', 'feeds_list' => '', 'maxnumber' => '', 'target' => '', 'useenclosures' => '') );
     $title = strip_tags($instance['title']);
     $feeds_list = strip_tags($instance['feeds_list']);
     $maxnumber = strip_tags($instance['maxnumber']);
     $target = strip_tags($instance['target']);
+    $useenclosures = strip_tags($instance['useenclosures']);
 ?>
       <p><label for="<?php echo $this->get_field_id('title'); ?>">Title: <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo attribute_escape($title); ?>" /></label></p>
 								    
@@ -148,6 +153,18 @@ class Image_Feed_Widget extends WP_Widget {
           if ( $instance['target'] == 'newwindow' ) { echo 'selected '; }
           echo 'value="newwindow">';
 	  echo 'New Window</option>'; ?>
+      </select></label></p>
+
+      <p><label for="<?php echo $this->get_field_id('useenclosures'); ?>">Use RSS enclosures? (leave yes if unsure) <select id="<?php echo $this->get_field_id('useenclosures'); ?>" name="<?php echo $this->get_field_name('useenclosures'); ?>"
+        <?php 
+  	  echo '<option ';
+          if ( $instance['useenclosures'] == 'yes' ) { echo 'selected '; }
+          echo 'value="yes">';
+	  echo 'Yes</option>';
+  	  echo '<option ';
+          if ( $instance['useenclosures'] == 'no' ) { echo 'selected '; }
+          echo 'value="no">';
+	  echo 'No</option>'; ?>
       </select></label></p>
 
 <?php
