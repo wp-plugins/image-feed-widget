@@ -3,7 +3,7 @@
 Plugin Name: Image Feed Widget
 Plugin URI: http://yorik.uncreated.net
 Description: A widget to display imges from RSS feeds such as twitter, flickr or youtube
-Version: 0.3
+Version: 0.4
 Author: Yorik van Havre
 Author URI: http://yorik.uncreated.net
 */
@@ -71,7 +71,9 @@ function get_image_feed_list($feedslist, $maxfeeds=90, $divname='standard', $pri
                                 }
                             } 
                             if ($printtext) {
-                              echo "<br/>".$item->get_title();
+                              if ($printtext != 'no') {
+                                echo "<div class='imgtitle'>".$item->get_title()."</div>";
+                              }
                             }?>
                           </a>
                       </div>
@@ -99,17 +101,20 @@ class Image_Feed_Widget extends WP_Widget {
     $feeds_list = empty($instance['feeds_list']) ? '&nbsp;' : $instance['feeds_list'];
     $maxnumber = empty($instance['maxnumber']) ? '&nbsp;' : $instance['maxnumber'];
     $target = empty($instance['target']) ? '&nbsp;' : $instance['target'];
+    $displaytitle = empty($instance['displaytitle']) ? '&nbsp' : $instance['displaytitle'];
     $useenclosures = empty($instance['useenclosures']) ? '&nbsp;' : $instance['useenclosures'];
  
     if ( !empty( $title ) ) { echo $before_title . $title . $after_title; };
 
     if ( empty( $target ) ) { $target = 'samewindow'; };
 
+    if ( empty( $displaytitle ) ) { $displaytitle = 'no'; };
+
     if ( empty( $useenclosures ) ) { $useenclosures = 'yes'; };
 
     if ( !empty( $feeds_list ) ) {
 
-      get_image_feed_list($feeds_list, $maxnumber, 'small', NULL, $target, $useenclosures); ?>
+      get_image_feed_list($feeds_list, $maxnumber, 'small', $displaytitle, $target, $useenclosures); ?>
 
                 <div style="clear:both;"></div>
 
@@ -124,17 +129,19 @@ class Image_Feed_Widget extends WP_Widget {
     $instance['feeds_list'] = strip_tags($new_instance['feeds_list']);
     $instance['maxnumber'] = strip_tags($new_instance['maxnumber']);
     $instance['target'] = strip_tags($new_instance['target']);
+    $instance['displaytitle'] = strip_tags($new_instance['displaytitle']);
     $instance['useenclosures'] = strip_tags($new_instance['useenclosures']);
  
     return $instance;
   }
  
   function form($instance) {
-    $instance = wp_parse_args( (array) $instance, array( 'title' => '', 'feeds_list' => '', 'maxnumber' => '', 'target' => '', 'useenclosures' => '') );
+    $instance = wp_parse_args( (array) $instance, array( 'title' => '', 'feeds_list' => '', 'maxnumber' => '', 'target' => '', 'displaytitle' => '', 'useenclosures' => '') );
     $title = strip_tags($instance['title']);
     $feeds_list = strip_tags($instance['feeds_list']);
     $maxnumber = strip_tags($instance['maxnumber']);
     $target = strip_tags($instance['target']);
+    $displaytitle = strip_tags($instance['displaytitle']);
     $useenclosures = strip_tags($instance['useenclosures']);
 ?>
       <p><label for="<?php echo $this->get_field_id('title'); ?>">Title: <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo attribute_escape($title); ?>" /></label></p>
@@ -153,6 +160,18 @@ class Image_Feed_Widget extends WP_Widget {
           if ( $instance['target'] == 'newwindow' ) { echo 'selected '; }
           echo 'value="newwindow">';
 	  echo 'New Window</option>'; ?>
+      </select></label></p>
+
+      <p><label for="<?php echo $this->get_field_id('displaytitle'); ?>">Display title below images? <select id="<?php echo $this->get_field_id('displaytitle'); ?>" name="<?php echo $this->get_field_name('displaytitle'); ?>"
+        <?php 
+  	  echo '<option ';
+          if ( $instance['displaytitle'] == 'yes' ) { echo 'selected '; }
+          echo 'value="yes">';
+	  echo 'Yes</option>';
+  	  echo '<option ';
+          if ( $instance['displaytitle'] == 'no' ) { echo 'selected '; }
+          echo 'value="no">';
+	  echo 'No</option>'; ?>
       </select></label></p>
 
       <p><label for="<?php echo $this->get_field_id('useenclosures'); ?>">Use RSS enclosures? (leave yes if unsure) <select id="<?php echo $this->get_field_id('useenclosures'); ?>" name="<?php echo $this->get_field_name('useenclosures'); ?>"

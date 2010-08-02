@@ -78,3 +78,6 @@ See the plugin in action on http://www.oteatromagico.mus.br/wordpress
 
 = 0.3 =
 * Added an option to disable the use of enclosure tags
+
+= 0.4 = 
+* Added an option to display image title or not
