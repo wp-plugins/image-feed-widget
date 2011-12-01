@@ -3,7 +3,7 @@
 Plugin Name: Image Feed Widget
 Plugin URI: http://yorik.uncreated.net
 Description: A widget to display imges from RSS feeds such as twitter, flickr or youtube
-Version: 0.4
+Version: 0.5
 Author: Yorik van Havre
 Author URI: http://yorik.uncreated.net
 */
@@ -150,7 +150,7 @@ class Image_Feed_Widget extends WP_Widget {
 		     
       <p><label for="<?php echo $this->get_field_id('maxnumber'); ?>">Max number of images to display: <input class="widefat" id="<?php echo $this->get_field_id('maxnumber'); ?>" name="<?php echo $this->get_field_name('maxnumber'); ?>" type="text" value="<?php echo attribute_escape($maxnumber); ?>" /></label></p>
 
-      <p><label for="<?php echo $this->get_field_id('target'); ?>">Where to open the links: <select id="<?php echo $this->get_field_id('target'); ?>" name="<?php echo $this->get_field_name('target'); ?>"
+      <p><label for="<?php echo $this->get_field_id('target'); ?>">Where to open the links: <select id="<?php echo $this->get_field_id('target'); ?>" name="<?php echo $this->get_field_name('target'); ?>">
         <?php 
   	  echo '<option ';
           if ( $instance['target'] == 'samewindow' ) { echo 'selected '; }
@@ -162,7 +162,7 @@ class Image_Feed_Widget extends WP_Widget {
 	  echo 'New Window</option>'; ?>
       </select></label></p>
 
-      <p><label for="<?php echo $this->get_field_id('displaytitle'); ?>">Display title below images? <select id="<?php echo $this->get_field_id('displaytitle'); ?>" name="<?php echo $this->get_field_name('displaytitle'); ?>"
+      <p><label for="<?php echo $this->get_field_id('displaytitle'); ?>">Display title below images? <select id="<?php echo $this->get_field_id('displaytitle'); ?>" name="<?php echo $this->get_field_name('displaytitle'); ?>">
         <?php 
   	  echo '<option ';
           if ( $instance['displaytitle'] == 'yes' ) { echo 'selected '; }
@@ -174,7 +174,7 @@ class Image_Feed_Widget extends WP_Widget {
 	  echo 'No</option>'; ?>
       </select></label></p>
 
-      <p><label for="<?php echo $this->get_field_id('useenclosures'); ?>">Use RSS enclosures? (leave yes if unsure) <select id="<?php echo $this->get_field_id('useenclosures'); ?>" name="<?php echo $this->get_field_name('useenclosures'); ?>"
+      <p><label for="<?php echo $this->get_field_id('useenclosures'); ?>">Use RSS enclosures? (leave yes if unsure) <select id="<?php echo $this->get_field_id('useenclosures'); ?>" name="<?php echo $this->get_field_name('useenclosures'); ?>">
         <?php 
   	  echo '<option ';
           if ( $instance['useenclosures'] == 'yes' ) { echo 'selected '; }

@@ -3,7 +3,7 @@ Contributors: yorik
 Donate link: None! Keep your money for important things!
 Tags: rss, feed, image, widget
 Requires at least: 2.8.4
-Tested up to: 2.9.2
+Tested up to: 3.2.1
 Stable tag: trunk
 
 A widget to display imges from RSS feeds such as twitter, flickr or youtube
@@ -81,3 +81,6 @@ See the plugin in action on http://www.oteatromagico.mus.br/wordpress
 
 = 0.4 = 
 * Added an option to display image title or not
+
+= 0.5 =
+* Fixed a bug that prevented multiple choices boxes to appear in the plugin settings
